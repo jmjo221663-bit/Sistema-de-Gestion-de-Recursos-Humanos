@@ -33,7 +33,7 @@ class EmpleadosController extends Controller {
             return $this->view('empleados/create', compact('error','departamentos'));
         }
 
-        // Validar correo empleado y user (igual que antes)
+        // Validar correo empleado y user 
         $checkEmp = Database::getInstance()->prepare("SELECT id FROM empleados WHERE correo = ?");
         $checkEmp->execute([$correo]);
         if ($checkEmp->fetch()) {
@@ -48,7 +48,7 @@ class EmpleadosController extends Controller {
             return $this->view('empleados/create', compact('error','departamentos'));
         }
 
-        // 1️⃣ Crear USUARIO primero
+        // 1️ Crear USUARIO primero
         $passwordTemp = strtolower(explode(' ', $nombre)[0]) . rand(1000, 9999);
 
         $user_id = User::create([
@@ -59,7 +59,7 @@ class EmpleadosController extends Controller {
             'active' => 1
         ]);
 
-        // 2️⃣ Crear EMPLEADO con user_id asignado
+        // 2️ Crear EMPLEADO con user_id asignado
         Empleado::create([
             'nombre' => $nombre,
             'apellidos' => $apellidos,
@@ -69,7 +69,7 @@ class EmpleadosController extends Controller {
             'puesto' => $puesto,
             'departamento_id' => $departamento_id,
             'estado' => $estado,
-            'user_id' => $user_id  // 🔥 AHORA SÍ SE GUARDA
+            'user_id' => $user_id  
         ]);
 
         $_SESSION['success'] = "Empleado registrado. Usuario creado:<br>
@@ -145,7 +145,7 @@ class EmpleadosController extends Controller {
                 'user_id' => $empleado['user_id']  // No cambia
             ]);
 
-            // Sincronizar usuario 👇
+            // Sincronizar usuario 
             if (!empty($empleado['user_id'])) {
                 $user = User::find($empleado['user_id']);
 
